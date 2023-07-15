@@ -1,6 +1,6 @@
 const DEFAULT_DELAY = 200;
 
-type ThrottleFn = (...args: unknown[]) => void;
+type ThrottleFn = (...args: any[]) => any;
 
 /**
  * The function implemented practice to skip some function calls.
