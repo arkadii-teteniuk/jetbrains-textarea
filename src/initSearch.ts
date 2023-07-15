@@ -1,4 +1,5 @@
 import { searchSubstr } from "./utils/search";
+import { throttle } from "./utils/throttle";
 
 type InitSearchFn = (
   editor: HTMLTextAreaElement | null,
@@ -21,20 +22,25 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
   const backdrop = document.createElement("div");
   backdrop.className = "backdrop";
 
-  // handle update of the search input
-  searchField.addEventListener("input", function (e: unknown) {
+  const throttledOnSearch = throttle(function onSearch(e: unknown) {
     backdrop.innerHTML = searchSubstr(
       editor.value,
       (e.target as HTMLInputElement).value,
     );
   });
 
-  editor.addEventListener("input", function (e: unknown) {
+  // handle update of the search input
+  searchField.addEventListener("input", throttledOnSearch);
+
+  const throttledOnTextChange = throttle(function onTextChange(e: unknown) {
     backdrop.innerHTML = searchSubstr(
       (e.target as HTMLTextAreaElement).value,
       searchField.value,
     );
   });
+
+  // handle update of the textarea
+  editor.addEventListener("input", throttledOnTextChange);
 
   // on scroll textarea need to scroll backdrop as well
   editor.addEventListener("scroll", function (e) {

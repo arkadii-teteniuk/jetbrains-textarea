@@ -20,6 +20,7 @@ export function throttle(func: ThrottleFn, delay = DEFAULT_DELAY): ThrottleFn {
     }, delay);
 
     if (wait) {
+      console.log("throttled", func.name);
       return;
     }
 
