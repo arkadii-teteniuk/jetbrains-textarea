@@ -1,12 +1,10 @@
+import { searchSubstr } from "./utils/search";
+
 type InitSearchFn = (
   editor: HTMLTextAreaElement | null,
   searchField: HTMLInputElement | null,
   options?: Record<string, unknown>,
 ) => void;
-
-export const searchSubstr = (fromText: string, textToReplace: string) => {
-  return fromText.replaceAll(textToReplace, "<mark>$&</mark>");
-};
 
 export const initSearch: InitSearchFn = (editor, searchField) => {
   if (!editor) {
