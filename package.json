@@ -1,0 +1,25 @@
+{
+  "name": "jetbrains-textarea",
+  "version": "1.0.0",
+  "description": "The utility allows finding text in a textarea and highlighting it.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arkadii-teteniuk/jetbrains-textarea.git"
+  },
+  "keywords": [
+    "jetbrains",
+    "assessment",
+    "test",
+    "task"
+  ],
+  "author": "Arkadii Teteniuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arkadii-teteniuk/jetbrains-textarea/issues"
+  },
+  "homepage": "https://github.com/arkadii-teteniuk/jetbrains-textarea#readme"
+}
