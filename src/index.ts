@@ -16,7 +16,7 @@ window.addEventListener("load", () => {
 
   initSearch(editor, search);
 
-  (editor as HTMLTextAreaElement).value = initialText;
+  (editor as HTMLTextAreaElement).value = initialText.repeat(99);
   (search as HTMLInputElement).value = initialSearch;
 
   // programmatically call search input value change
