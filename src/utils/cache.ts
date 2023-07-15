@@ -10,16 +10,16 @@ export const loggerProxy: ProxyHandler<Record<string, string>> = {
     const cachedValue = Reflect.get(target, prop, receiver);
 
     if (cachedValue) {
-      console.log(`Cache: get from ${prop}`);
+      console.log(`Cache: get from ${prop.toString()}`);
     } else {
-      console.log(`Cache: no cached value for ${prop}`);
+      console.log(`Cache: no cached value for ${prop.toString()}`);
     }
 
     return cachedValue;
   },
 
   set(target, prop, receiver, newValue) {
-    console.log(`Cache: set for ${prop}`);
+    console.log(`Cache: set for ${prop.toString()}`);
     return Reflect.set(target, prop, receiver, newValue);
   },
 };
