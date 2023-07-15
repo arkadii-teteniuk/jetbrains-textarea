@@ -1,11 +1,14 @@
 import { searchSubstr } from "./utils/search";
 import { throttle } from "./utils/throttle";
 import { getCache } from "./utils/cache";
+import { getScrollbarWidth } from "./utils/getScrollbarWidth";
 
 type InitSearchFn = (
   editor: HTMLTextAreaElement | null,
   searchField: HTMLInputElement | null,
-  options?: Record<string, unknown>,
+  options?: {
+    scrollToTheFirstResult: false;
+  } & Record<string, unknown>,
 ) => void;
 
 const cache = getCache();
@@ -80,9 +83,14 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
     backdrop.scrollTo(target.scrollLeft, target.scrollTop);
   });
 
-  new ResizeObserver(() => {
+  const onResize = throttle(() => {
     backdrop.scrollTo(editor.scrollLeft, editor.scrollTop);
-  }).observe(editor);
+  }, 120);
+
+  // handle resize of the textarea
+  new ResizeObserver(onResize).observe(editor);
+
+  backdrop.style.paddingRight = `${getScrollbarWidth()}px`;
 
   container.append(backdrop, editor);
 
