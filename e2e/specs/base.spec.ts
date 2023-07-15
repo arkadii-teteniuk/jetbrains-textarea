@@ -207,7 +207,7 @@ test.describe("Highlight textarea search", () => {
       const screenshotSubdir = getScreenshotsPath(currentCase);
 
       await page.screenshot({
-        path: `./screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
+        path: `./e2e/screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
         clip: {
           ...DEFAULT_CLIP,
           width: currentCase.width,
