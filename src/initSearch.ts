@@ -1,11 +1,40 @@
 import { searchSubstr } from "./utils/search";
 import { throttle } from "./utils/throttle";
+import { getCache } from "./utils/cache";
 
 type InitSearchFn = (
   editor: HTMLTextAreaElement | null,
   searchField: HTMLInputElement | null,
   options?: Record<string, unknown>,
 ) => void;
+
+const cache = getCache();
+
+function wrapFoundEntitiesByTag(
+  parent: Element,
+  fromText: string,
+  textToReplace: string,
+) {
+  const cachedValue = cache.get(textToReplace);
+
+  if (cachedValue) {
+    // console.log(`get cached! ${textToReplace}`, cachedValue)
+    parent.innerHTML = cachedValue;
+    return cachedValue;
+  }
+
+  if (!textToReplace) {
+    parent.innerHTML = fromText;
+    cache.save(textToReplace, fromText);
+    return;
+  }
+
+  const updatedHighlightedText = searchSubstr(fromText, textToReplace);
+  cache.save(textToReplace, updatedHighlightedText);
+  parent.innerHTML = updatedHighlightedText;
+
+  return updatedHighlightedText;
+}
 
 export const initSearch: InitSearchFn = (editor, searchField) => {
   if (!editor) {
@@ -23,7 +52,8 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
   backdrop.className = "backdrop";
 
   const throttledOnSearch = throttle(function onSearch(e: unknown) {
-    backdrop.innerHTML = searchSubstr(
+    wrapFoundEntitiesByTag(
+      backdrop,
       editor.value,
       (e.target as HTMLInputElement).value,
     );
@@ -33,7 +63,9 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
   searchField.addEventListener("input", throttledOnSearch);
 
   const throttledOnTextChange = throttle(function onTextChange(e: unknown) {
-    backdrop.innerHTML = searchSubstr(
+    cache.reset();
+    wrapFoundEntitiesByTag(
+      backdrop,
       (e.target as HTMLTextAreaElement).value,
       searchField.value,
     );
