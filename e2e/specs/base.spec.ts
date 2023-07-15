@@ -11,8 +11,8 @@ const selectors = {
 };
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  // await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
+  // await page.goto("http://localhost:5173/");
+  await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
 });
 
 const DEFAULT_WIDTH = 410;
@@ -41,17 +41,17 @@ type TestCase = {
 };
 
 const testCase: TestCase[] = [
-  // {
-  //   name: `Find elements (total: 3, visible: 3)`,
-  //   prefix: "base",
-  //   search: "book",
-  //   text: loremIpsum.repeat(2) + "book book book",
-  //   total: 3,
-  //   visible: 3,
-  //   width: 410,
-  //   height: 145,
-  //   predefinedText: false,
-  // },
+  {
+    name: `Find elements (total: 3, visible: 3)`,
+    prefix: "base",
+    search: "book",
+    text: loremIpsum.repeat(2) + "book book book",
+    total: 3,
+    visible: 3,
+    width: 410,
+    height: 145,
+    predefinedText: false,
+  },
   {
     name: `Find elements (total: 6, visible: 6)`,
     prefix: "base",
@@ -63,18 +63,18 @@ const testCase: TestCase[] = [
     height: 145,
     predefinedText: false,
   },
-  // {
-  //   name: `Find elements (total: 9, visible: 6)`,
-  //   prefix: "base",
-  //   search: "book",
-  //   text:
-  //     "book book book" + loremIpsum.repeat(2) + "book book book book book book",
-  //   total: 9,
-  //   visible: 6,
-  //   width: 410,
-  //   height: 145,
-  //   predefinedText: false,
-  // },
+  {
+    name: `Find elements (total: 9, visible: 6)`,
+    prefix: "base",
+    search: "book",
+    text:
+      "book book book" + loremIpsum.repeat(2) + "book book book book book book",
+    total: 9,
+    visible: 6,
+    width: 410,
+    height: 145,
+    predefinedText: false,
+  },
 
   // predefined text (scrollTop)
   {
@@ -196,7 +196,7 @@ test.describe("Highlight textarea search", () => {
           } else {
             // it needs especially for Safari, which does not move carriage on .fill()
             // it works without this workaround in browser
-            // node.scrollTo(0, node.scrollHeight);
+            node.scrollTo(0, node.scrollHeight);
           }
         },
         { innerCurrentCase: currentCase },
@@ -207,7 +207,7 @@ test.describe("Highlight textarea search", () => {
       const screenshotSubdir = getScreenshotsPath(currentCase);
 
       await page.screenshot({
-        path: `./e2e/screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
+        path: `./screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
         clip: {
           ...DEFAULT_CLIP,
           width: currentCase.width,
