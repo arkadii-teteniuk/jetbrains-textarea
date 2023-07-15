@@ -51,7 +51,7 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
   const backdrop = document.createElement("div");
   backdrop.className = "backdrop";
 
-  const throttledOnSearch = throttle(function onSearch(e: unknown) {
+  const throttledOnSearch = throttle(function onSearch(e: Event) {
     wrapFoundEntitiesByTag(
       backdrop,
       editor.value,
@@ -62,7 +62,7 @@ export const initSearch: InitSearchFn = (editor, searchField) => {
   // handle update of the search input
   searchField.addEventListener("input", throttledOnSearch);
 
-  const throttledOnTextChange = throttle(function onTextChange(e: unknown) {
+  const throttledOnTextChange = throttle(function onTextChange(e: Event) {
     cache.reset();
     wrapFoundEntitiesByTag(
       backdrop,
