@@ -1,47 +1,42 @@
 import { throttle } from "./throttle";
-import { wait } from "./wait";
+
+jest.useFakeTimers();
 
 describe("Throttle", () => {
   it("Skipped", async () => {
     let i = 0;
-    const throttled = throttle(function () {
-      i++;
-    });
+    const throttled = throttle(() => i++);
 
     throttled();
     throttled();
     throttled();
     throttled(); // trailing
-    await wait(200);
+    jest.advanceTimersByTime(200);
     expect(i).toEqual(2);
   });
 
   it("Resumed", async () => {
     let i = 0;
-    const throttled = throttle(function () {
-      i++;
-    });
+    const throttled = throttle(() => i++);
 
     throttled();
-    await wait(200);
+    jest.advanceTimersByTime(200);
     throttled();
     throttled();
     throttled(); // trailing
-    await wait(200);
+    jest.advanceTimersByTime(200);
     expect(i).toEqual(3);
   });
 
   it("Trailing", async () => {
     let i = 0;
-    const throttled = throttle(function () {
-      i++;
-    });
+    const throttled = throttle(() => i++);
 
     throttled(); // fire
-    await wait(200);
+    jest.advanceTimersByTime(200);
     throttled(); // fire
     throttled(); // trailing
-    await wait(200);
+    jest.advanceTimersByTime(200);
 
     expect(i).toEqual(3);
   });
