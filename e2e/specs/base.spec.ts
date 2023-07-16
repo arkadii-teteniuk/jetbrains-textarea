@@ -1,28 +1,13 @@
 import { expect, test } from "@playwright/test";
-import { loremIpsum } from "./mocks";
 import { wait } from "../../src/utils/wait";
 import { checkIntersection } from "../../src/utils/checkIntersection";
-
-const selectors = {
-  foundEntity: ".backdrop mark",
-  search: "#search-field",
-  editor: "textarea.editor",
-  container: ".container",
-};
+import { mockTextMultiline } from "../../src/mocks";
+import { DEFAULT_CLIP, SELECTORS } from "../../src/constants";
 
 test.beforeEach(async ({ page }) => {
   // await page.goto("http://localhost:5173/");
   await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
 });
-
-const DEFAULT_WIDTH = 410;
-const DEFAULT_HEIGHT = 145;
-const DEFAULT_CLIP = {
-  width: DEFAULT_WIDTH,
-  height: DEFAULT_HEIGHT,
-  y: 0,
-  x: 0,
-};
 
 function getScreenshotsPath(data: TestCase) {
   return `${data.prefix}-${data.total}-visible-${data.visible}`;
@@ -45,7 +30,7 @@ const testCase: TestCase[] = [
     name: `Find elements (total: 3, visible: 3)`,
     prefix: "base",
     search: "book",
-    text: loremIpsum.repeat(2) + "book book book",
+    text: mockTextMultiline.repeat(2) + "book book book",
     total: 3,
     visible: 3,
     width: 410,
@@ -68,7 +53,9 @@ const testCase: TestCase[] = [
     prefix: "base",
     search: "book",
     text:
-      "book book book" + loremIpsum.repeat(2) + "book book book book book book",
+      "book book book" +
+      mockTextMultiline.repeat(2) +
+      "book book book book book book",
     total: 9,
     visible: 6,
     width: 410,
@@ -82,7 +69,7 @@ const testCase: TestCase[] = [
     prefix: "predefined-text",
 
     search: "book",
-    text: loremIpsum.repeat(2) + "book book book",
+    text: mockTextMultiline.repeat(2) + "book book book",
     total: 3,
     visible: 0,
     width: 410,
@@ -94,7 +81,8 @@ const testCase: TestCase[] = [
     prefix: "predefined-text",
 
     search: "book",
-    text: "book book book" + loremIpsum + "book book book book book book",
+    text:
+      "book book book" + mockTextMultiline + "book book book book book book",
     total: 9,
     visible: 3,
     width: 410,
@@ -107,19 +95,19 @@ const testCase: TestCase[] = [
     name: `Find elements (total: 3, visible: 3) + Predefined text + Extended size`,
     prefix: "predefined-text-extended-size",
     search: "book",
-    text: loremIpsum.repeat(2) + "book book book",
+    text: mockTextMultiline.repeat(2) + "book book book",
     total: 3,
     visible: 0,
     width: 410,
     height: 300,
     predefinedText: true,
   },
-
   {
     name: `Find elements (total: 9, visible: 6) + Predefined text + Extended size`,
     prefix: "predefined-text-extended-size",
     search: "book",
-    text: "book book book" + loremIpsum + "book book book book book book",
+    text:
+      "book book book" + mockTextMultiline + "book book book book book book",
     total: 9,
     visible: 3,
     width: 410,
@@ -174,9 +162,9 @@ test("Has title", async ({ page }) => {
 test.describe("Highlight textarea search", () => {
   testCase.forEach((currentCase) => {
     test(currentCase.name, async ({ page, browserName }) => {
-      const search = page.locator(selectors.search);
-      const editor = page.locator(selectors.editor);
-      const container = page.locator(selectors.container);
+      const search = page.locator(SELECTORS.search);
+      const editor = page.locator(SELECTORS.editor);
+      const container = page.locator(SELECTORS.container);
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
@@ -215,7 +203,7 @@ test.describe("Highlight textarea search", () => {
         },
       });
 
-      const allFoundItems = await page.locator(selectors.foundEntity);
+      const allFoundItems = await page.locator(SELECTORS.foundEntity);
 
       const elementsCount = await allFoundItems.count();
       const containerBox = await container.boundingBox();
