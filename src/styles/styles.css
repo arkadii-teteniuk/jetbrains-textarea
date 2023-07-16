@@ -2,24 +2,24 @@
 * Reset
  */
 
-html {
-    line-height: 1.15; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
+*, *:before, *:after {
+    box-sizing: border-box;
 }
 
-body {
-    margin: 0;
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
 }
 
 input,
 textarea {
-    font-family: inherit; /* 1 */
-    font-size: 100%; /* 1 */
-    line-height: 1.15; /* 1 */
-    margin: 0; /* 2 */
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
 }
 
-input { /* 1 */
+input {
     overflow: visible;
 }
 
@@ -37,7 +37,7 @@ input, textarea {
  */
 
 body {
-    padding: 12px;
+    margin: 12px;
     gap: 12px;
 
     display: flex;
@@ -53,7 +53,7 @@ body {
     display: flex;
     flex-direction: column;
 
-    width: 410px;
+    /*width: 410px;*/
 }
 
 .search textarea, input[type="text"] {
@@ -65,7 +65,6 @@ body {
 .search textarea[rows="1"], .search input[type="text"] {
     white-space: nowrap;
     overflow: hidden;
-    box-sizing: border-box;
     height: 24px;
     line-height: 19px;
     display: block;
@@ -79,9 +78,8 @@ input {
 
 .editor {
     display: block;
-    box-sizing: border-box;
 
-    width: 410px;
+    /*width: 410px;*/
     height: 80px;
 
     padding: 5px;
@@ -97,8 +95,6 @@ input {
 }
 
 .container, .backdrop, .editor {
-    box-sizing: border-box;
-
     min-width: 410px;
     min-height: 120px;
 }
@@ -148,3 +144,19 @@ input {
 
     word-break: inherit;
 }
+
+@media screen and (max-width: 400px) {
+    .search {
+        width: 100%;
+    }
+    .container, .backdrop, .editor {
+        min-width: 100%;
+    }
+}
+@media screen and (min-width: 768px) {
+    .search, .container, .backdrop, .editor {
+        max-width: 410px;
+    }
+}
+
+
