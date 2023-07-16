@@ -19,11 +19,14 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
+      with:
+        working-directory: ./app
+        build: npm run dev
+        wait-on: 'http://localhost:5173'
+        record: true
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
-env:
-  PLAYWRIGHT_TEST_URL: https://arkadii-teteniuk.github.io/jetbrains-textarea/
