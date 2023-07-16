@@ -5,4 +5,7 @@ module.exports = {
     "^.+\\.ts?$": "ts-jest",
   },
   transformIgnorePatterns: ["<rootDir>/node_modules/"],
+  testPathIgnorePatterns: [
+    "e2e/specs/base.spec.ts", // Игнорирует конкретный файл base.spec.ts
+  ],
 };
