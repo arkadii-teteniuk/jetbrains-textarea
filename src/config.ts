@@ -8,5 +8,5 @@ const featureDefaults: SearchConfig = {
 
 export const options: SearchConfig = {
   ...featureDefaults,
-  multilineSearch: true,
+  multilineSearch: false,
 };

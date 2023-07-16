@@ -108,8 +108,35 @@ class TextareaSearch {
     );
   }
 
+  private getClosestNode(posY: number, nodes: NodeListOf<HTMLElement>) {
+    for (const entity of nodes) {
+      if (posY < entity.offsetTop) {
+        return entity;
+      }
+    }
+
+    return null;
+  }
+
+  private navigateToTheNextEntity() {
+    const entities = this.backdrop.querySelectorAll("mark");
+    const currentPos = this.editor.scrollTop;
+    const closest = this.getClosestNode(currentPos, entities);
+
+    if (closest) {
+      this.editor.scrollTo(0, closest.offsetTop);
+    }
+  }
+
   private addEventListeners() {
     const throttledOnSearch = throttle(() => this.handleTextOrSearchUpdate());
+
+    this.search.addEventListener("keypress", (e) => {
+      if ((e as KeyboardEvent).key === "Enter") {
+        e.preventDefault();
+        this.navigateToTheNextEntity();
+      }
+    });
 
     // handle update of the search input
     this.search.addEventListener("input", throttledOnSearch);
