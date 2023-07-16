@@ -1,9 +1,7 @@
-type CustomCache = {
-  print: () => void;
-  reset: () => void;
-  save: (request: string, text: string) => void;
-  get: (request: string) => string | null;
-};
+/**
+ * Is a Proxy-helper to log accessing to cached data.
+ * @implements {Proxy}
+ */
 
 export const loggerProxy: ProxyHandler<Record<string, string>> = {
   get(target, prop, receiver) {
@@ -23,6 +21,18 @@ export const loggerProxy: ProxyHandler<Record<string, string>> = {
     return Reflect.set(target, prop, receiver, newValue);
   },
 };
+
+type CustomCache = {
+  print: () => void;
+  reset: () => void;
+  save: (request: string, text: string) => void;
+  get: (request: string) => string | null;
+};
+
+/**
+ * Creates cache for reduce calculations amount.
+ * @returns {CustomCache} is an API to access cached data
+ */
 
 export const getCache = (): CustomCache => {
   let _cache: Record<string, string> = new Proxy({}, loggerProxy);

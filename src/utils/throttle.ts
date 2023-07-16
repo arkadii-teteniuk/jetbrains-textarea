@@ -1,16 +1,24 @@
 const DEFAULT_DELAY = 200;
 
-type ThrottleFn = (...args: any[]) => any;
-
 /**
- * The function implemented practice to skip some function calls.
- * @param func {ThrottleFn}
- * @param delay {number}
- * @returns {ThrottleFn}
- */
+ * Creates a throttled function which fires `func` only once per {delay} ms.
+ * @param func {Function} the function to throttle.
+ * @param delay {number} [delay=200] is a time to wait.
+ * @returns {Function} the throttled function.
+ **/
 
-export function throttle(func: ThrottleFn, delay = DEFAULT_DELAY): ThrottleFn {
+export function throttle(
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  func: Function,
+  delay = DEFAULT_DELAY,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+): Function {
   let wait = false;
+
+  if (typeof func !== "function") {
+    throw new TypeError('"func" must be a function');
+  }
+
   let trailing: NodeJS.Timeout | null = null;
 
   return (...args) => {
