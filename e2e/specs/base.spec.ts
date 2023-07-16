@@ -9,10 +9,6 @@ test.beforeEach(async ({ page }) => {
   // await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
 });
 
-function getScreenshotsPath(data: TestCase) {
-  return `${data.prefix}-${data.total}-visible-${data.visible}`;
-}
-
 type TestCase = {
   name: string;
   prefix: string;
@@ -162,7 +158,7 @@ test("Has title", async ({ page }) => {
 
 test.describe("Highlight textarea search", () => {
   testCase.forEach((currentCase) => {
-    test(currentCase.name, async ({ page, browserName }) => {
+    test(currentCase.name, async ({ page }) => {
       const search = page.locator(SELECTORS.search);
       const editor = page.locator(SELECTORS.editor);
       const container = page.locator(SELECTORS.container);
@@ -188,6 +184,7 @@ test.describe("Highlight textarea search", () => {
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
+          node.removeAttribute("spellcheck");
           node.scrollTo(
             0,
             innerCurrentCase.predefinedText ? 0 : node.scrollHeight,
@@ -199,17 +196,17 @@ test.describe("Highlight textarea search", () => {
       // todo sort out how to avoid using
       await wait(400);
 
-      const screenshotSubdir = getScreenshotsPath(currentCase);
-
       const { height } = await page.locator("body").boundingBox();
-      await page.screenshot({
-        path: `./screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
+
+      const screenshot = await page.screenshot({
         clip: {
           ...DEFAULT_CLIP,
           width: 600,
           height: height + 10,
         },
       });
+
+      expect(screenshot).toMatchSnapshot();
 
       const allFoundItems = await page.locator(SELECTORS.foundEntity);
 
