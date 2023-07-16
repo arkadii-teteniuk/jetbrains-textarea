@@ -12,6 +12,7 @@ describe("Throttle", () => {
     throttled();
     throttled(); // trailing
     jest.advanceTimersByTime(200);
+
     expect(i).toEqual(2);
   });
 
@@ -25,6 +26,7 @@ describe("Throttle", () => {
     throttled();
     throttled(); // trailing
     jest.advanceTimersByTime(200);
+
     expect(i).toEqual(3);
   });
 
