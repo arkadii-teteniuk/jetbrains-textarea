@@ -5,8 +5,7 @@ import { mockTextMultiline } from "../../src/mocks";
 import { DEFAULT_CLIP, SELECTORS } from "../../src/constants";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("http://localhost:5173/");
-  // await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
+  await page.goto(process.env.PLAYWRIGHT_TEST_URL ?? "http://localhost:5173/");
 });
 
 type TestCase = {
