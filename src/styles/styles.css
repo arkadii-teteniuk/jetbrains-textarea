@@ -17,6 +17,7 @@ textarea {
     font-size: 100%;
     line-height: 1.15;
     margin: 0;
+    outline: none;
 }
 
 input {
@@ -29,7 +30,7 @@ textarea {
 
 /* Safari - solving issue when using user-select:none on the <body> text input doesn't working */
 input, textarea {
-    -webkit-user-select: auto;
+    /*-webkit-user-select: auto;*/
 }
 
 /**
