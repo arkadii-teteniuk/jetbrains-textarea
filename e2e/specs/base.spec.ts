@@ -5,8 +5,8 @@ import { mockTextMultiline } from "../../src/mocks";
 import { DEFAULT_CLIP, SELECTORS } from "../../src/constants";
 
 test.beforeEach(async ({ page }) => {
-  // await page.goto("http://localhost:5173/");
-  await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
+  await page.goto("http://localhost:5173/");
+  // await page.goto("https://arkadii-teteniuk.github.io/jetbrains-textarea/");
 });
 
 function getScreenshotsPath(data: TestCase) {
@@ -23,6 +23,7 @@ type TestCase = {
   width: number;
   height: number;
   predefinedText: boolean;
+  multiline?: boolean;
 };
 
 const testCase: TestCase[] = [
@@ -139,19 +140,19 @@ const testCase: TestCase[] = [
     height: 145,
     predefinedText: false,
   },
-
-  // {
-  //   name: `Very long line with break`,
-  //   prefix: "long-line-1-break",
-  //   search:
-  //     "School asdasodiaposidaaosidaosidoasidaisudoaiuasdasidaosiduaosiduaoisudoaiusdoiausoiduaosiduaoisudoaisudoiau",
-  //   text: "School\nasdasodiaposidaaosidaosidoasidaisudoaiuasdasidaosiduaosiduaoisudoaiusdoiausoiduaosiduaoisudoaisudoiau",
-  //   total: 1,
-  //   visible: 1,
-  //   width: 410,
-  //   height: 145,
-  //   predefinedText: false,
-  // },
+  {
+    name: `Very long line with break`,
+    prefix: "long-line-1-break",
+    search:
+      "School\nasdasodiaposidaaosidaosidoasidaisudoaiuasdasidaosiduaosiduaoisudoaiusdoiausoiduaosiduaoisudoaisudoiau",
+    text: "School\nasdasodiaposidaaosidaosidoasidaisudoaiuasdasidaosiduaosiduaoisudoaiusdoiausoiduaosiduaoisudoaisudoiau",
+    total: 1,
+    multiline: true,
+    visible: 1,
+    width: 410,
+    height: 145,
+    predefinedText: false,
+  },
 ];
 
 test("Has title", async ({ page }) => {
@@ -165,6 +166,7 @@ test.describe("Highlight textarea search", () => {
       const search = page.locator(SELECTORS.search);
       const editor = page.locator(SELECTORS.editor);
       const container = page.locator(SELECTORS.container);
+      const multilineSwitcher = page.locator(SELECTORS.multilineSwitcher);
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
@@ -174,32 +176,35 @@ test.describe("Highlight textarea search", () => {
         { innerCurrentCase: currentCase },
       );
 
+      if (currentCase.multiline) {
+        await multilineSwitcher.click();
+      }
+
       await editor.fill(currentCase.text);
       await search.fill(currentCase.search);
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
-          if (innerCurrentCase.predefinedText) {
-            node.scrollTo(0, 0);
-          } else {
-            // it needs especially for Safari, which does not move carriage on .fill()
-            // it works without this workaround in browser
-            node.scrollTo(0, node.scrollHeight);
-          }
+          node.scrollTo(
+            0,
+            innerCurrentCase.predefinedText ? 0 : node.scrollHeight,
+          );
         },
         { innerCurrentCase: currentCase },
       );
 
+      // todo sort out how to avoid using
       await wait(400);
 
       const screenshotSubdir = getScreenshotsPath(currentCase);
 
+      const { height } = await page.locator("body").boundingBox();
       await page.screenshot({
         path: `./screenshots/${screenshotSubdir}/${browserName}-${Date.now()}.png`,
         clip: {
           ...DEFAULT_CLIP,
-          width: currentCase.width,
-          height: currentCase.height + (await search.boundingBox()).height,
+          width: 600,
+          height: height + 10,
         },
       });
 
