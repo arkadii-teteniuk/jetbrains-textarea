@@ -1,12 +1,12 @@
-export type SearchOptions = {
+export type SearchConfig = {
   multilineSearch: boolean;
 };
 
-const featureDefaults: SearchOptions = {
+const featureDefaults: SearchConfig = {
   multilineSearch: false,
 };
 
-export const options: SearchOptions = {
+export const options: SearchConfig = {
   ...featureDefaults,
-  multilineSearch: false,
+  multilineSearch: true,
 };
