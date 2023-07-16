@@ -154,8 +154,11 @@ input {
     }
 }
 @media screen and (min-width: 768px) {
-    .search, .container, .backdrop, .editor {
+    .search {
         max-width: 410px;
+    }
+    .container, .backdrop, .editor {
+        width: 410px;
     }
 }
 
