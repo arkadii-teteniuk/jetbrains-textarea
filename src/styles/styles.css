@@ -157,7 +157,7 @@ input {
     .search {
         max-width: 410px;
     }
-    .container, .backdrop, .editor {
+    .editor {
         width: 410px;
     }
 }
