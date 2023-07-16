@@ -7,7 +7,7 @@ const config = {
     "plugin:react/recommended",
     "standard-with-typescript",
   ],
-  plugins: ["prettier", "react"],
+  plugins: ["prettier"],
   rules: {
     "prettier/prettier": [
       "error",
@@ -37,16 +37,9 @@ const config = {
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/indent": "off",
     "multiline-ternary": "off",
-    "react/jsx-closing-bracket-location": [
-      1,
-      { selfClosing: "tag-aligned", nonEmpty: "after-props" },
-    ],
   },
   parserOptions: {
     project: "./tsconfig.json",
-  },
-  settings: {
-    react: { version: "detect" },
   },
 };
 
