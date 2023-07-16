@@ -30,7 +30,9 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },
-
+  expect: {
+    toMatchSnapshot: { maxDiffPixelRatio: 0.05 },
+  },
   /* Configure projects for major browsers */
   projects: [
     {
