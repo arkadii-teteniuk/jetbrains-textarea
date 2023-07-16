@@ -176,9 +176,12 @@ test.describe("Highlight textarea search", () => {
         { innerCurrentCase: currentCase },
       );
 
-      if (currentCase.multiline) {
-        await multilineSwitcher.click();
-      }
+      multilineSwitcher.evaluate((input, isMultilineRequired) => {
+        const checkbox = input as HTMLInputElement;
+        if (!checkbox.checked && isMultilineRequired) {
+          checkbox.click();
+        }
+      }, currentCase.multiline);
 
       await editor.fill(currentCase.text);
       await search.fill(currentCase.search);
