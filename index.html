@@ -8,11 +8,23 @@
     <link rel="stylesheet" href="src/styles/styles.css">
   </head>
   <body>
-    <div class="search">
-      <input type="text" id="search-field" value=""></input>
-    </div>
+  <div class="settings">
+    <label>Multiline:
+      <input id="search-multiline" type="checkbox">
+    </label>
+  </div>
 
-    <textarea class="editor" spellcheck="true"></textarea>
-    <script type="module" src="/src/index.ts"></script>
+  <div class="search">
+    <label>Search query:
+      <input type="text" id="search-field" value="">
+    </label>
+  </div>
+
+  <div class="textContainer">
+    <label for="text">Text:</label>
+    <textarea id="text" class="editor" spellcheck="true"></textarea>
+  </div>
+
+  <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

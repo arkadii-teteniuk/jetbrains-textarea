@@ -1,98 +1,213 @@
-import { searchSubstr } from "./utils/search";
 import { throttle } from "./utils/throttle";
-import { getCache } from "./utils/cache";
+import { CustomCache, getCache } from "./utils/cache";
 import { getScrollbarWidth } from "./utils/getScrollbarWidth";
+import { SearchOptions, options } from "./config";
+import { SELECTORS } from "./constants";
+import { searchSubstr } from "./utils/search";
 
-type InitSearchFn = (
-  editor: HTMLTextAreaElement | null,
-  searchField: HTMLInputElement | null,
-  options?: {
-    scrollToTheFirstResult: false;
-  } & Record<string, unknown>,
-) => void;
+class TextareaSearch {
+  #editor: HTMLTextAreaElement;
+  #backdrop: HTMLDivElement;
+  #container: HTMLDivElement;
+  #search: HTMLInputElement | HTMLTextAreaElement;
+  #multilineSwitcher: HTMLInputElement;
 
-const cache = getCache();
+  #initialText: string;
+  #initialSearch: string;
+  #selectors: typeof SELECTORS;
+  #options: SearchOptions;
+  #cache: CustomCache;
 
-function wrapFoundEntitiesByTag(
-  parent: Element,
-  fromText: string,
-  textToReplace: string,
-) {
-  const cachedValue = cache.get(textToReplace);
+  constructor(
+    initialText: string,
+    initialSearch: string,
+    selectors: typeof SELECTORS,
+    options: SearchOptions,
+  ) {
+    this.#initialText = initialText;
+    this.#initialSearch = initialSearch;
+    this.#selectors = selectors;
+    this.#options = options;
+    this.#cache = getCache();
 
-  if (cachedValue) {
-    // console.log(`get cached! ${textToReplace}`, cachedValue)
-    parent.innerHTML = cachedValue;
-    return cachedValue;
+    this.#multilineSwitcher = this.#initMultilineSwitcher();
+    this.#editor = this.#initEditor();
+    this.#search = this.#initSearch();
+    // const searchTextarea = makeInputMultiline(searchField);
+    this.#container = this.#createContainer();
+    this.#backdrop = this.#createBackdrop();
   }
 
-  if (!textToReplace) {
-    parent.innerHTML = fromText;
-    cache.save(textToReplace, fromText);
-    return;
+  #initEditor(): HTMLTextAreaElement {
+    const editorNode = document.querySelector(this.#selectors.editor);
+
+    if (!editorNode) {
+      throw new TypeError('"editor" must be specified');
+    }
+
+    return editorNode as HTMLTextAreaElement;
   }
 
-  const updatedHighlightedText = searchSubstr(fromText, textToReplace);
-  cache.save(textToReplace, updatedHighlightedText);
-  parent.innerHTML = updatedHighlightedText;
+  #initSearch() {
+    const searchControl = document.querySelector(this.#selectors.search) as
+      | HTMLInputElement
+      | HTMLTextAreaElement;
 
-  return updatedHighlightedText;
+    if (!searchControl) {
+      throw new TypeError('"searchField" must be specified');
+    }
+
+    return searchControl as HTMLInputElement | HTMLTextAreaElement;
+  }
+
+  #initMultilineSwitcher(): HTMLInputElement {
+    const checkboxSearchMultiline = document.querySelector(
+      this.#selectors.multilineSwitcher,
+    );
+
+    if (!checkboxSearchMultiline) {
+      throw new TypeError('"checkboxSearchMultiline" must be specified');
+    }
+
+    return checkboxSearchMultiline as HTMLInputElement;
+  }
+
+  #createContainer() {
+    const container = document.createElement("div");
+    container.className = "container";
+    return container;
+  }
+
+  #createBackdrop() {
+    const backdrop = document.createElement("div");
+    backdrop.className = "backdrop";
+    backdrop.style.paddingRight = `${getScrollbarWidth()}px`;
+    return backdrop;
+  }
+
+  #getHighlightedText(fromText: string, textToReplace: string) {
+    const cachedValue = this.#cache.get(textToReplace);
+
+    if (cachedValue) {
+      return cachedValue;
+    }
+
+    if (!textToReplace) {
+      this.#cache.save("", fromText);
+      return fromText;
+    }
+
+    const updatedHighlightedText = searchSubstr(fromText, textToReplace);
+    this.#cache.save(textToReplace, updatedHighlightedText);
+    return updatedHighlightedText;
+  }
+
+  #handleTextOrSearchUpdate() {
+    this.#backdrop.innerHTML = this.#getHighlightedText(
+      this.#editor.value,
+      this.#search.value,
+    );
+  }
+
+  #addEventListeners() {
+    const throttledOnSearch = throttle(() => this.#handleTextOrSearchUpdate());
+
+    // handle update of the search input
+    this.#search.addEventListener("input", throttledOnSearch);
+
+    const throttledOnTextChange = throttle(() => {
+      this.#cache.reset();
+      this.#handleTextOrSearchUpdate();
+    });
+
+    // handle update of the textarea
+    this.#editor.addEventListener("input", throttledOnTextChange);
+
+    // on scroll textarea need to scroll backdrop as well
+    this.#editor.addEventListener("scroll", (e) => {
+      const target = e.target as HTMLTextAreaElement;
+      this.#backdrop.scrollTo(target.scrollLeft, target.scrollTop);
+    });
+
+    this.#multilineSwitcher.addEventListener("change", (e) => {
+      const isChecked = (e.target as HTMLInputElement).checked;
+      options.multilineSearch = isChecked;
+
+      this.#search.removeEventListener("input", throttledOnSearch);
+      if (isChecked) {
+        this.#switchToMultilineSearch();
+      } else {
+        this.#switchToBasicSearch();
+      }
+
+      this.#search.addEventListener("input", throttledOnSearch);
+    });
+  }
+
+  #addResizeObserver() {
+    const editor = this.#editor;
+    const onResize = throttle(() => {
+      this.#backdrop.scrollTo(editor.scrollLeft, editor.scrollTop);
+    });
+    // handle resize of the textarea
+    new ResizeObserver(onResize).observe(editor);
+  }
+
+  #combineNodes() {
+    const container = this.#container;
+    container.append(this.#backdrop, this.#editor);
+    document.querySelector(this.#selectors.textContainer)?.append(container);
+  }
+
+  #setDefaultValues() {
+    this.#editor.value = this.#initialText;
+    this.#search.value = this.#initialSearch;
+
+    // init correct state of the search control based on `options`
+    if (this.#options.multilineSearch) {
+      const checkboxSearchMultiline = this.#multilineSwitcher;
+      checkboxSearchMultiline.checked = options.multilineSearch;
+      checkboxSearchMultiline.dispatchEvent(new Event("change"));
+    }
+  }
+
+  #replaceSearchControl(updatedControl) {
+    const searchInput = this.#search;
+    searchInput.parentElement?.append(updatedControl);
+    searchInput?.remove();
+    this.#search = updatedControl;
+  }
+
+  #switchToMultilineSearch() {
+    const searchInput = this.#search;
+    const searchMultiline = document.createElement("textarea");
+    searchMultiline.id = "search-field";
+    searchMultiline.value = searchInput?.value;
+    this.#replaceSearchControl(searchMultiline);
+  }
+
+  #switchToBasicSearch() {
+    const searchInput = this.#search;
+    const searchBasic = document.createElement("input");
+    searchBasic.type = "text";
+    searchBasic.id = "search-field";
+    searchBasic.value = searchInput.value;
+    this.#replaceSearchControl(searchBasic);
+  }
+
+  init() {
+    this.#addEventListeners();
+    this.#addResizeObserver();
+    this.#setDefaultValues();
+    this.#combineNodes();
+    // programmatically call search input value change
+    this.#search.dispatchEvent(new Event("input"));
+    return this;
+  }
 }
 
-export const initSearch: InitSearchFn = (editor, searchField) => {
-  if (!editor) {
-    throw new TypeError('"editor" must be specified');
-  }
-
-  if (!searchField) {
-    throw new TypeError('"searchField" must be specified');
-  }
-
-  const container = document.createElement("div");
-  container.className = "container";
-
-  const backdrop = document.createElement("div");
-  backdrop.className = "backdrop";
-
-  const throttledOnSearch = throttle(function onSearch(e: Event) {
-    wrapFoundEntitiesByTag(
-      backdrop,
-      editor.value,
-      (e.target as HTMLInputElement).value,
-    );
-  });
-
-  // handle update of the search input
-  searchField.addEventListener("input", throttledOnSearch);
-
-  const throttledOnTextChange = throttle(function onTextChange(e: Event) {
-    cache.reset();
-    wrapFoundEntitiesByTag(
-      backdrop,
-      (e.target as HTMLTextAreaElement).value,
-      searchField.value,
-    );
-  });
-
-  // handle update of the textarea
-  editor.addEventListener("input", throttledOnTextChange);
-
-  // on scroll textarea need to scroll backdrop as well
-  editor.addEventListener("scroll", function (e) {
-    const target = e.target as HTMLTextAreaElement;
-    backdrop.scrollTo(target.scrollLeft, target.scrollTop);
-  });
-
-  const onResize = throttle(() => {
-    backdrop.scrollTo(editor.scrollLeft, editor.scrollTop);
-  }, 120);
-
-  // handle resize of the textarea
-  new ResizeObserver(onResize).observe(editor);
-
-  backdrop.style.paddingRight = `${getScrollbarWidth()}px`;
-
-  container.append(backdrop, editor);
-
-  document.querySelector("body")?.append(container);
-};
+export const initSearch = (
+  initialText: string,
+  initialSearch: string,
+): TextareaSearch =>
+  new TextareaSearch(initialText, initialSearch, SELECTORS, options).init();
