@@ -1,9 +1,9 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, action ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, action ]
 jobs:
   test:
     timeout-minutes: 60
@@ -19,11 +19,6 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-      with:
-        working-directory: ./app
-        build: npm run dev
-        wait-on: 'http://localhost:5173'
-        record: true
     - uses: actions/upload-artifact@v3
       if: always()
       with:
