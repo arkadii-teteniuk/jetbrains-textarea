@@ -1,5 +1,8 @@
 const DEFAULT_DELAY = 200;
 
+/* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
+type ThrottleFunc<T extends any[] = any[]> = (...args: T) => void;
+
 /**
  * Creates a throttled function which fires `func` only once per {delay} ms.
  * @param func {Function} the function to throttle.
@@ -8,11 +11,9 @@ const DEFAULT_DELAY = 200;
  **/
 
 export function throttle(
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  func: Function,
+  func: ThrottleFunc,
   delay = DEFAULT_DELAY,
-  // eslint-disable-next-line @typescript-eslint/ban-types
-): Function {
+): ThrottleFunc {
   let wait = false;
 
   if (typeof func !== "function") {
@@ -28,7 +29,6 @@ export function throttle(
     }, delay);
 
     if (wait) {
-      console.log("throttled", func.name);
       return;
     }
 
