@@ -8,15 +8,30 @@
     
     
     
-    <script type="module" crossorigin src="/jetbrains-textarea/assets/index-c4695e6e.js"></script>
-    <link rel="stylesheet" href="/jetbrains-textarea/assets/index-6d6eed26.css">
+    <script type="module" crossorigin src="/jetbrains-textarea/assets/index-8bb88243.js"></script>
+    <link rel="stylesheet" href="/jetbrains-textarea/assets/index-8cf16014.css">
   </head>
   <body>
-    <div class="search">
-      <input type="text" id="search-field" value=""></input>
-    </div>
+  <div class="settings">
+    <label>Multiline:
+      <input id="search-multiline" type="checkbox">
+    </label>
+<!--    <label>One line:-->
+<!--      <input id="search-one-line-with-breaks" type="checkbox">-->
+<!--    </label>-->
+  </div>
 
-    <textarea class="editor" spellcheck="true"></textarea>
-    
+  <div class="search">
+    <label>Search query:
+      <input type="text" id="search-field" value=""></input>
+    </label>
+  </div>
+
+  <div class="textContainer">
+    <label for="text">Text:</label>
+    <textarea id="text" class="editor" spellcheck="true"></textarea>
+  </div>
+
+  
   </body>
 </html>
