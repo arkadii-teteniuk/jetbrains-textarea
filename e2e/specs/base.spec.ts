@@ -201,7 +201,7 @@ test.describe("Highlight textarea search", () => {
         clip: {
           ...DEFAULT_CLIP,
           width: 600,
-          height: height + 10,
+          height: height + 20,
         },
       });
 
