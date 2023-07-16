@@ -4,7 +4,7 @@ The `jetbrains-textarea` utility allows you to find text in a textarea and highl
 
 ## Demo
 
-It's available on the following link: [https://arkadii-teteniuk.github.io/jetbrains-textarea/](https://arkadii-teteniuk.github.io/jetbrains-textarea/)
+It's available via the following link: [https://arkadii-teteniuk.github.io/jetbrains-textarea/](https://arkadii-teteniuk.github.io/jetbrains-textarea/)
 
 ## Installation
 
@@ -56,7 +56,7 @@ The following scripts are available for development, testing, building, and depl
 The repository for `jetbrains-textarea` is hosted on GitHub. You can access it at https://github.com/arkadii-teteniuk/jetbrains-textarea.
 
 ## Issues
-If you encounter any issues or have suggestions for improvements, please open an issue on the GitHub repository.
+If you encounter any issues or have suggestions for improvements, please open an issue in the GitHub repository.
 
 ## License
 `jetbrains-textarea` is licensed under the ISC license. See the LICENSE file for more information.

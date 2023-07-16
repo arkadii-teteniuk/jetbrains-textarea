@@ -149,7 +149,7 @@ class TextareaSearch {
     // handle update of the textarea
     this.editor.addEventListener("input", throttledOnTextChange);
 
-    // on scroll textarea need to scroll backdrop as well
+    // when scrolling the textarea, the backdrop should be scrolled as well
     this.editor.addEventListener("scroll", (e) => {
       const target = e.target as HTMLTextAreaElement;
       this.backdrop.scrollTo(target.scrollLeft, target.scrollTop);
@@ -189,7 +189,7 @@ class TextareaSearch {
     this.editor.value = this.initialText;
     this.search.value = this.initialSearch;
 
-    // init correct state of the search control based on `options`
+    // init a correct state of the search control based on `options`
     if (this.options.multilineSearch) {
       const checkboxSearchMultiline = this.multilineSwitcher;
       checkboxSearchMultiline.checked = options.multilineSearch;

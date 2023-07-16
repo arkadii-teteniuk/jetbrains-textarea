@@ -1,5 +1,5 @@
 /**
- * Returns string with all of substring entities wrapped by `<mark>`. The very first and obvious solution.
+ * Returns a string with all of the substring entities wrapped by `<mark>`. The very first and obvious solution.
  */
 
 export const searchSubstr = (fromText: string, textToReplace: string) => {

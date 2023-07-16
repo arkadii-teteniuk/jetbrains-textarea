@@ -1,5 +1,5 @@
 /**
- * Is a Proxy-helper to log accessing to cached data.
+ * A Proxy-helper to log accessing to the cached data.
  * @implements {Proxy}
  */
 
@@ -30,7 +30,7 @@ export type CustomCache = {
 };
 
 /**
- * Creates cache for reduce calculations amount.
+ * Creates cache to reduce the number of calculations.
  */
 
 export const getCache = (): CustomCache => {

@@ -1,9 +1,9 @@
 /**
- * Returns width of scrollbar in px. That needs according to the fact that browser API does not provide function to do that.
+ * Returns the width of the scrollbar in px. The function is needed as the browser API does not provide such functionality.
  *
- * Different GUI and OS provides different sizes for that component:
+ * Different GUIs and operating systems provide different sizes for this component:
  * 1. Windows 11 - `17px`;
- * 2. MacOS - `15px` with visible scrollbars, `0px` in case of hidden ones;
+ * 2. MacOS - `15px` for visible scrollbars, `0px` for hidden ones;
  * 3. Linux Ubuntu – `18px`;
  * 4. Other various widths.
  **/

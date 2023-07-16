@@ -6,7 +6,7 @@ export type Box = {
 };
 
 /**
- * Returns true in case if rect1 and rect2 have intersections.
+ * Returns true if rect1 and rect2 have intersections.
  */
 export function checkIntersection(rect1: Box, rect2: Box): boolean {
   const left1 = rect1.x;
