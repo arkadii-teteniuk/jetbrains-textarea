@@ -6,12 +6,9 @@
  * 2. MacOS - `15px` with visible scrollbars, `0px` in case of hidden ones;
  * 3. Linux Ubuntu – `18px`;
  * 4. Other various widths.
- *
- * @param doc {Document} is a link to page document;
- * @returns {number} width of a scrollbar in px.
- */
+ **/
 
-export function getScrollbarWidth(doc = document) {
+export function getScrollbarWidth(doc: Document = document): number {
   const div = doc.createElement("div");
   div.style.overflowY = "scroll";
   div.style.visibility = "hidden";

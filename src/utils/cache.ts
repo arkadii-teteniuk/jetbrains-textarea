@@ -22,7 +22,7 @@ export const loggerProxy: ProxyHandler<Record<string, string>> = {
   },
 };
 
-type CustomCache = {
+export type CustomCache = {
   print: () => void;
   reset: () => void;
   save: (request: string, text: string) => void;
@@ -31,7 +31,6 @@ type CustomCache = {
 
 /**
  * Creates cache for reduce calculations amount.
- * @returns {CustomCache} is an API to access cached data
  */
 
 export const getCache = (): CustomCache => {

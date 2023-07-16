@@ -7,9 +7,6 @@ export type Box = {
 
 /**
  * Returns true in case if rect1 and rect2 have intersections.
- * @param rect1 {Box}
- * @param rect2 {Box}
- * @returns {boolean}
  */
 export function checkIntersection(rect1: Box, rect2: Box): boolean {
   const left1 = rect1.x;

@@ -3,13 +3,6 @@ const DEFAULT_DELAY = 200;
 /* eslint-disable-next-line  @typescript-eslint/no-explicit-any */
 type ThrottleFunc<T extends any[] = any[]> = (...args: T) => void;
 
-/**
- * Creates a throttled function which fires `func` only once per {delay} ms.
- * @param func {Function} the function to throttle.
- * @param delay {number} [delay=200] is a time to wait.
- * @returns {Function} the throttled function.
- **/
-
 export function throttle(
   func: ThrottleFunc,
   delay = DEFAULT_DELAY,
