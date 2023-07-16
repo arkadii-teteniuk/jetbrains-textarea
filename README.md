@@ -2,6 +2,10 @@
 
 The `jetbrains-textarea` utility allows you to find text in a textarea and highlight it.
 
+## Demo
+
+It's available on the following link: [https://arkadii-teteniuk.github.io/jetbrains-textarea/](https://arkadii-teteniuk.github.io/jetbrains-textarea/)
+
 ## Installation
 
 To use `jetbrains-textarea`, follow these steps:
