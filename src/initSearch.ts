@@ -171,7 +171,9 @@ class TextareaSearch {
     }
   }
 
-  #replaceSearchControl(updatedControl) {
+  #replaceSearchControl(
+    updatedControl: HTMLInputElement | HTMLTextAreaElement,
+  ) {
     const searchInput = this.#search;
     searchInput.parentElement?.append(updatedControl);
     searchInput?.remove();
