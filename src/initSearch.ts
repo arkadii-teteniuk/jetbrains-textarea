@@ -130,13 +130,14 @@ class TextareaSearch {
 
   private addEventListeners() {
     const throttledOnSearch = throttle(() => this.handleTextOrSearchUpdate());
-
-    this.search.addEventListener("keypress", (e) => {
+    const onSearchKeyPress = (e) => {
       if ((e as KeyboardEvent).key === "Enter") {
         e.preventDefault();
         this.navigateToTheNextEntity();
       }
-    });
+    };
+
+    this.search.addEventListener("keypress", onSearchKeyPress);
 
     // handle update of the search input
     this.search.addEventListener("input", throttledOnSearch);
@@ -160,6 +161,7 @@ class TextareaSearch {
       options.multilineSearch = isChecked;
 
       this.search.removeEventListener("input", throttledOnSearch);
+      this.search.removeEventListener("keypress", onSearchKeyPress);
       if (isChecked) {
         this.switchToMultilineSearch();
       } else {
@@ -167,6 +169,7 @@ class TextareaSearch {
       }
 
       this.search.addEventListener("input", throttledOnSearch);
+      this.search.addEventListener("keypress", onSearchKeyPress);
     });
   }
 
