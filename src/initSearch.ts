@@ -130,7 +130,7 @@ class TextareaSearch {
 
   private addEventListeners() {
     const throttledOnSearch = throttle(() => this.handleTextOrSearchUpdate());
-    const onSearchKeyPress = (e) => {
+    const onSearchKeyPress = (e: Event) => {
       if ((e as KeyboardEvent).key === "Enter") {
         e.preventDefault();
         this.navigateToTheNextEntity();
