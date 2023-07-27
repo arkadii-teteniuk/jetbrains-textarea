@@ -12,10 +12,17 @@ export const DEFAULT_CLIP = {
 export const INITIAL_SEARCH_TEXT = mockTextMultiline;
 export const INITIAL_SEARCH_VALUE = mockSearchTextValue;
 export const SELECTORS = {
-  foundEntity: ".backdrop mark",
-  search: "#search-field",
-  editor: ".editor",
-  container: ".container",
-  textContainer: ".textContainer",
   multilineSwitcher: "#search-multiline",
+
+  search: "#search-field",
+  searchPrev: "#search-prev",
+  searchNext: "#search-next",
+  searchReset: "#search-reset",
+  searchResults: "#search-results",
+
+  container: ".container",
+
+  editor: ".editor",
+  foundEntity: ".backdrop mark",
+  textContainer: ".textContainer",
 };
