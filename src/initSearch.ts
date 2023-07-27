@@ -1,6 +1,5 @@
 import { throttle } from "./utils/throttle";
 import { CustomCache, getCache } from "./utils/cache";
-import { getScrollbarWidth } from "./utils/getScrollbarWidth";
 import { SearchConfig, options } from "./config";
 import { SELECTORS } from "./constants";
 import { searchSubstr } from "./utils/search";
@@ -80,7 +79,6 @@ class TextareaSearch {
   private createBackdrop() {
     const backdrop = document.createElement("div");
     backdrop.className = "backdrop";
-    backdrop.style.paddingRight = `${getScrollbarWidth()}px`;
     return backdrop;
   }
 

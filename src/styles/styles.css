@@ -93,7 +93,6 @@ input {
 
     resize: both;
     max-width: 100vw;
-    overflow-y: scroll;
 }
 
 .container, .backdrop, .editor {
@@ -120,6 +119,9 @@ input {
     padding-right: 0;
     border: 1px solid black;
 
+    overflow-y: auto;
+    overflow-x: hidden;
+
     white-space: break-spaces;
     word-break: break-word;
 }
@@ -130,10 +132,9 @@ input {
     width: 100%;
     height: 100%;
     position: absolute;
-    overflow: hidden;
 
     pointer-events: none;
-    padding-right: 15px;
+    padding-right: 0;
 
     white-space: break-spaces;
 }
