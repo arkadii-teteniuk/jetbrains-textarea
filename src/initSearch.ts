@@ -49,6 +49,7 @@ class TextareaSearch {
     this.search = this.initSearch();
     this.container = this.createContainer();
     this.backdrop = this.createBackdrop();
+
     this.searchButtonPrev = this.initSearchButtonPrev();
     this.searchButtonNext = this.initSearchButtonNext();
     this.searchButtonReset = this.initSearchButtonReset();
@@ -58,14 +59,15 @@ class TextareaSearch {
     const buttonPrev = document.querySelector(
       this.selectors.searchPrev
     ) as HTMLButtonElement;
+
     buttonPrev.addEventListener("click", () => {
-      console.log("click prev", this.selectedFoundEntity);
       if (this.selectedFoundEntity) {
         this.selectedFoundEntity--;
       }
 
       this.highlightSelectedSearchResult();
     });
+
     return buttonPrev;
   }
 
@@ -78,12 +80,6 @@ class TextareaSearch {
       if (!this.foundEntities) {
         return;
       }
-
-      console.log(
-        "click next",
-        this.selectedFoundEntity,
-        this.foundEntities?.length
-      );
 
       if (this.selectedFoundEntity == null) {
         this.selectedFoundEntity = 0;
@@ -269,8 +265,8 @@ class TextareaSearch {
 
   private addResizeObserver() {
     const editor = this.editor;
-    const onResize = throttle(() => {
-      this.backdrop.scrollTo(editor.scrollLeft, editor.scrollTop);
+    const onResize: ResizeObserverCallback = throttle(([{ target }]) => {
+      this.backdrop.scrollTo(target.scrollLeft, target.scrollTop);
     });
     // handle resize of the textarea
     new ResizeObserver(onResize).observe(editor);
