@@ -19,6 +19,7 @@ export const SELECTORS = {
   searchNext: "#search-next",
   searchReset: "#search-reset",
   searchResults: "#search-results",
+  searchRegex: "#search-regex",
 
   container: ".container",
 

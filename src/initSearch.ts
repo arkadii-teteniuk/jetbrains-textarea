@@ -10,6 +10,7 @@ class TextareaSearch {
   private container: HTMLDivElement;
 
   private multilineSwitcher: HTMLInputElement;
+  private regexSwitcher: HTMLInputElement;
 
   private search: HTMLInputElement | HTMLTextAreaElement;
   private searchButtonNext: HTMLButtonElement | null;
@@ -43,6 +44,8 @@ class TextareaSearch {
     this.foundEntities = null;
 
     this.multilineSwitcher = this.initMultilineSwitcher();
+    this.regexSwitcher = this.initRegexSwitcher();
+
     this.editor = this.initEditor();
     this.search = this.initSearch();
     this.container = this.createContainer();
@@ -179,6 +182,18 @@ class TextareaSearch {
     return checkboxSearchMultiline as HTMLInputElement;
   }
 
+  private initRegexSwitcher(): HTMLInputElement {
+    const checkboxSearchRegex = document.querySelector(
+      this.selectors.searchRegex
+    );
+
+    if (!checkboxSearchRegex) {
+      throw new TypeError('"checkboxSearchRegex" must be specified');
+    }
+
+    return checkboxSearchRegex as HTMLInputElement;
+  }
+
   private createContainer() {
     const container = document.createElement("div");
     container.className = "container";
@@ -203,7 +218,11 @@ class TextareaSearch {
       return fromText;
     }
 
-    const updatedHighlightedText = searchSubstr(fromText, textToReplace);
+    const updatedHighlightedText = searchSubstr(
+      fromText,
+      textToReplace,
+      this.regexSwitcher.checked
+    );
     this.cache.save(textToReplace, updatedHighlightedText);
     return updatedHighlightedText;
   }
@@ -221,6 +240,10 @@ class TextareaSearch {
   private addEventListeners() {
     const throttledOnSearch = throttle(() => {
       this.selectedFoundEntity = null;
+      this.handleTextOrSearchUpdate();
+    });
+
+    this.regexSwitcher.addEventListener("change", () => {
       this.handleTextOrSearchUpdate();
     });
 
