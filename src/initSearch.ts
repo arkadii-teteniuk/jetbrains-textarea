@@ -10,7 +10,6 @@ class TextareaSearch {
   private backdrop: HTMLDivElement;
   private container: HTMLDivElement;
 
-  private multilineSwitcher: HTMLInputElement;
   private regexSwitcher: HTMLInputElement;
 
   private search: HTMLInputElement | HTMLTextAreaElement;
@@ -44,7 +43,6 @@ class TextareaSearch {
     this.selectedFoundEntity = null;
     this.foundEntities = null;
 
-    this.multilineSwitcher = this.initMultilineSwitcher();
     this.regexSwitcher = this.initRegexSwitcher();
 
     this.editor = this.initEditor();
@@ -171,18 +169,6 @@ class TextareaSearch {
     }
   }
 
-  private initMultilineSwitcher(): HTMLInputElement {
-    const checkboxSearchMultiline = document.querySelector(
-      this.selectors.multilineSwitcher
-    );
-
-    if (!checkboxSearchMultiline) {
-      throw new TypeError('"checkboxSearchMultiline" must be specified');
-    }
-
-    return checkboxSearchMultiline as HTMLInputElement;
-  }
-
   private initRegexSwitcher(): HTMLInputElement {
     const checkboxSearchRegex = document.querySelector(
       this.selectors.searchRegex
@@ -249,7 +235,8 @@ class TextareaSearch {
     });
 
     const onSearchKeyPress = (e: Event) => {
-      if ((e as KeyboardEvent).key === "Enter") {
+      const keyboardEvent = e as KeyboardEvent;
+      if (keyboardEvent.key === "Enter" && !keyboardEvent.shiftKey) {
         e.preventDefault();
         this.searchButtonNext?.click();
       }
@@ -273,22 +260,6 @@ class TextareaSearch {
       const target = e.target as HTMLTextAreaElement;
       this.backdrop.scrollTo(target.scrollLeft, target.scrollTop);
     });
-
-    this.multilineSwitcher.addEventListener("change", (e) => {
-      const isChecked = (e.target as HTMLInputElement).checked;
-      options.multilineSearch = isChecked;
-
-      this.search.removeEventListener("input", throttledOnSearch);
-      this.search.removeEventListener("keypress", onSearchKeyPress);
-      if (isChecked) {
-        this.switchToMultilineSearch();
-      } else {
-        this.switchToBasicSearch();
-      }
-
-      this.search.addEventListener("input", throttledOnSearch);
-      this.search.addEventListener("keypress", onSearchKeyPress);
-    });
   }
 
   private addResizeObserver() {
@@ -309,39 +280,6 @@ class TextareaSearch {
   private setDefaultValues() {
     this.editor.value = this.initialText;
     this.search.value = this.initialSearch;
-
-    // init a correct state of the search control based on `options`
-    if (this.options.multilineSearch) {
-      const checkboxSearchMultiline = this.multilineSwitcher;
-      checkboxSearchMultiline.checked = options.multilineSearch;
-      checkboxSearchMultiline.dispatchEvent(new Event("change"));
-    }
-  }
-
-  private replaceSearchControl(
-    updatedControl: HTMLInputElement | HTMLTextAreaElement
-  ) {
-    const searchInput = this.search;
-    searchInput.parentElement?.append(updatedControl);
-    searchInput?.remove();
-    this.search = updatedControl;
-  }
-
-  private switchToMultilineSearch() {
-    const searchInput = this.search;
-    const searchMultiline = document.createElement("textarea");
-    searchMultiline.id = "search-field";
-    searchMultiline.value = searchInput?.value;
-    this.replaceSearchControl(searchMultiline);
-  }
-
-  private switchToBasicSearch() {
-    const searchInput = this.search;
-    const searchBasic = document.createElement("input");
-    searchBasic.type = "text";
-    searchBasic.id = "search-field";
-    searchBasic.value = searchInput.value;
-    this.replaceSearchControl(searchBasic);
   }
 
   init() {

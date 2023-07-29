@@ -1,4 +1,4 @@
-import { mockSearchTextValue, mockTextMultiline } from "./mocks";
+import { mockSearchTextMultilineValue, mockTextMultiline } from "./mocks";
 
 export const DEFAULT_WIDTH = 410;
 export const DEFAULT_HEIGHT = 145;
@@ -10,10 +10,8 @@ export const DEFAULT_CLIP = {
 };
 
 export const INITIAL_SEARCH_TEXT = mockTextMultiline;
-export const INITIAL_SEARCH_VALUE = mockSearchTextValue;
+export const INITIAL_SEARCH_VALUE = mockSearchTextMultilineValue;
 export const SELECTORS = {
-  multilineSwitcher: "#search-multiline",
-
   search: "#search-field",
   searchPrev: "#search-prev",
   searchNext: "#search-next",

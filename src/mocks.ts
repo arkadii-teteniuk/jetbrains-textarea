@@ -23,3 +23,4 @@ export const mockHighlightedText =
   "Lorem <mark>ipsum</mark> dolor sit amet, consectetur adipiscing elit. Mauris fringilla finibus elit, at fermentum magna tincidunt at. Vivamus blandit aliquam feugiat. In et dignissim sem, nec sagittis neque. Aenean euismod sem id ex bibendum lobortis. Aenean vel mattis mauris. In viverra purus in sagittis tempus. Suspendisse sagittis blandit enim ac pharetra. Vestibulum et bibendum nulla, vel commodo sem. Vivamus purus odio, posuere vitae bibendum id, convallis quis diam. Nullam nec eros vitae ligula convallis gravida quis at neque. Duis sagittis ullamcorper est, ac varius leo.\n";
 
 export const mockSearchTextValue = "ipsum";
+export const mockSearchTextMultilineValue = "leo.\n" + "\n" + "Nam";
