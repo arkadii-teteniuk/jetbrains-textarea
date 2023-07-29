@@ -88,7 +88,7 @@ const testCase: TestCase[] = [
 
   // predefined text + bigger size
   {
-    name: `Find elements (total: 3, visible: 3) + Predefined text + Extended size`,
+    name: `Find elements (total: 3, visible: 0) + Predefined text + Extended size`,
     prefix: "predefined-text-extended-size",
     search: "book",
     text: mockTextMultiline.repeat(2) + "book book book",
@@ -99,7 +99,7 @@ const testCase: TestCase[] = [
     predefinedText: true,
   },
   {
-    name: `Find elements (total: 9, visible: 6) + Predefined text + Extended size`,
+    name: `Find elements (total: 9, visible: 3) + Predefined text + Extended size`,
     prefix: "predefined-text-extended-size",
     search: "book",
     text:
@@ -160,36 +160,29 @@ test.describe("Highlight textarea search", () => {
     test(currentCase.name, async ({ page }) => {
       const search = page.locator(SELECTORS.search);
       const editor = page.locator(SELECTORS.editor);
+
       const container = page.locator(SELECTORS.container);
-      const multilineSwitcher = page.locator(SELECTORS.multilineSwitcher);
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
           node.style.width = `${innerCurrentCase.width}px`;
           node.style.height = `${innerCurrentCase.height}px`;
         },
-        { innerCurrentCase: currentCase },
+        { innerCurrentCase: currentCase }
       );
-
-      multilineSwitcher.evaluate((input, isMultilineRequired) => {
-        const checkbox = input as HTMLInputElement;
-        if (!checkbox.checked && isMultilineRequired) {
-          checkbox.click();
-        }
-      }, currentCase.multiline);
 
       await editor.fill(currentCase.text);
       await search.fill(currentCase.search);
 
       await editor.evaluate(
         (node, { innerCurrentCase }) => {
-          node.removeAttribute("spellcheck");
+          node.setAttribute("spellcheck", "false");
           node.scrollTo(
             0,
-            innerCurrentCase.predefinedText ? 0 : node.scrollHeight,
+            innerCurrentCase.predefinedText ? 0 : node.scrollHeight
           );
         },
-        { innerCurrentCase: currentCase },
+        { innerCurrentCase: currentCase }
       );
 
       // todo sort out how to avoid using
