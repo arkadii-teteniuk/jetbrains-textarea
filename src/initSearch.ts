@@ -3,6 +3,7 @@ import { CustomCache, getCache } from "./utils/cache";
 import { SearchConfig, options } from "./config";
 import { SELECTORS } from "./constants";
 import { searchSubstr } from "./utils/search";
+import { sanitize } from "./utils/sanitize";
 
 class TextareaSearch {
   private editor: HTMLTextAreaElement;
@@ -229,8 +230,8 @@ class TextareaSearch {
 
   private handleTextOrSearchUpdate() {
     this.backdrop.innerHTML = this.getHighlightedText(
-      this.editor.value,
-      this.search.value
+      sanitize(this.editor.value),
+      sanitize(this.search.value)
     );
 
     this.foundEntities = this.backdrop.querySelectorAll("mark");
