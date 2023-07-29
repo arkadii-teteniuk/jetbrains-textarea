@@ -221,6 +221,9 @@ class TextareaSearch {
       sanitize(this.search.value)
     );
 
+    // to fix the issue with unsync backdrop and editor
+    this.editor.dispatchEvent(new Event("scroll"));
+
     this.foundEntities = this.backdrop.querySelectorAll("mark");
     this.updateSearchResults();
   }
