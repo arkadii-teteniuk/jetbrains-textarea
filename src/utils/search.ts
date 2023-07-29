@@ -6,7 +6,7 @@ export const searchSubstr = (
   fromText: string,
   textToReplace: string,
   regex = false
-) => {
+): string => {
   if (!regex) {
     return fromText.replaceAll(textToReplace, "<mark>$&</mark>");
   }
@@ -15,6 +15,7 @@ export const searchSubstr = (
     const rg = new RegExp(textToReplace, "g");
     return fromText.replaceAll(rg, "<mark>$&</mark>");
   } catch (e) {
-    console.info("Bad pattern");
+    console.info("Bad regular expression");
+    return textToReplace;
   }
 };

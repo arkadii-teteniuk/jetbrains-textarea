@@ -1,6 +1,5 @@
 import { throttle } from "./utils/throttle";
 import { CustomCache, getCache } from "./utils/cache";
-import { SearchConfig, options } from "./config";
 import { SELECTORS } from "./constants";
 import { searchSubstr } from "./utils/search";
 import { sanitize } from "./utils/sanitize";
@@ -13,9 +12,6 @@ class TextareaSearch {
   private regexSwitcher: HTMLInputElement;
 
   private search: HTMLInputElement | HTMLTextAreaElement;
-  private searchButtonNext: HTMLButtonElement | null;
-  private searchButtonPrev: HTMLButtonElement | null;
-  private searchButtonReset: HTMLButtonElement | null;
 
   private foundEntities: NodeListOf<HTMLElement> | null;
   private closestFoundNode: HTMLElement | null;
@@ -24,19 +20,16 @@ class TextareaSearch {
   private initialText: string;
   private initialSearch: string;
   private selectors: typeof SELECTORS;
-  private options: SearchConfig;
   private cache: CustomCache;
 
   constructor(
     initialText: string,
     initialSearch: string,
-    selectors: typeof SELECTORS,
-    options: SearchConfig
+    selectors: typeof SELECTORS
   ) {
     this.initialText = initialText;
     this.initialSearch = initialSearch;
     this.selectors = selectors;
-    this.options = options;
     this.cache = getCache();
 
     this.closestFoundNode = null;
@@ -50,9 +43,9 @@ class TextareaSearch {
     this.container = this.createContainer();
     this.backdrop = this.createBackdrop();
 
-    this.searchButtonPrev = this.initSearchButtonPrev();
-    this.searchButtonNext = this.initSearchButtonNext();
-    this.searchButtonReset = this.initSearchButtonReset();
+    this.initSearchButtonPrev();
+    this.initSearchButtonNext();
+    this.initSearchButtonReset();
   }
 
   private initSearchButtonPrev() {
@@ -71,23 +64,27 @@ class TextareaSearch {
     return buttonPrev;
   }
 
+  private navigateNext() {
+    if (!this.foundEntities) {
+      return;
+    }
+
+    if (this.selectedFoundEntity == null) {
+      this.selectedFoundEntity = 0;
+    } else if (this.selectedFoundEntity < this.foundEntities?.length - 1) {
+      this.selectedFoundEntity++;
+    }
+
+    this.highlightSelectedSearchResult();
+  }
+
   private initSearchButtonNext() {
     const buttonNext = document.querySelector(
       this.selectors.searchNext
     ) as HTMLButtonElement;
 
     buttonNext.addEventListener("click", () => {
-      if (!this.foundEntities) {
-        return;
-      }
-
-      if (this.selectedFoundEntity == null) {
-        this.selectedFoundEntity = 0;
-      } else if (this.selectedFoundEntity < this.foundEntities?.length - 1) {
-        this.selectedFoundEntity++;
-      }
-
-      this.highlightSelectedSearchResult();
+      this.navigateNext();
     });
     return buttonNext;
   }
@@ -116,10 +113,11 @@ class TextareaSearch {
       this.closestFoundNode.className = "";
     }
 
-    this.closestFoundNode = this.foundEntities[this.selectedFoundEntity];
-
-    if (this.closestFoundNode) {
-      this.closestFoundNode.className = "selected";
+    if (this.selectedFoundEntity) {
+      this.closestFoundNode = this.foundEntities[this.selectedFoundEntity];
+      if (this.closestFoundNode) {
+        this.closestFoundNode.className = "selected";
+      }
     }
 
     this.updateSearchResults();
@@ -189,7 +187,7 @@ class TextareaSearch {
     return backdrop;
   }
 
-  private getHighlightedText(fromText: string, textToReplace: string) {
+  private getHighlightedText(fromText: string, textToReplace: string): string {
     const cacheKey = JSON.stringify({
       textToReplace,
       regex: this.regexSwitcher.checked,
@@ -242,7 +240,7 @@ class TextareaSearch {
       const keyboardEvent = e as KeyboardEvent;
       if (keyboardEvent.key === "Enter" && !keyboardEvent.shiftKey) {
         e.preventDefault();
-        this.searchButtonNext?.click();
+        this.navigateNext();
       }
     };
 
@@ -301,4 +299,4 @@ export const initSearch = (
   initialText: string,
   initialSearch: string
 ): TextareaSearch =>
-  new TextareaSearch(initialText, initialSearch, SELECTORS, options).init();
+  new TextareaSearch(initialText, initialSearch, SELECTORS).init();
