@@ -194,7 +194,12 @@ class TextareaSearch {
   }
 
   private getHighlightedText(fromText: string, textToReplace: string) {
-    const cachedValue = this.cache.get(textToReplace);
+    const cacheKey = JSON.stringify({
+      textToReplace,
+      regex: this.regexSwitcher.checked,
+    });
+
+    const cachedValue = this.cache.get(cacheKey);
 
     if (cachedValue) {
       return cachedValue;
@@ -210,7 +215,7 @@ class TextareaSearch {
       textToReplace,
       this.regexSwitcher.checked
     );
-    this.cache.save(textToReplace, updatedHighlightedText);
+    this.cache.save(cacheKey, updatedHighlightedText);
     return updatedHighlightedText;
   }
 
