@@ -113,7 +113,7 @@ class TextareaSearch {
       this.closestFoundNode.className = "";
     }
 
-    if (this.selectedFoundEntity) {
+    if (this.selectedFoundEntity !== null) {
       this.closestFoundNode = this.foundEntities[this.selectedFoundEntity];
       if (this.closestFoundNode) {
         this.closestFoundNode.className = "selected";
