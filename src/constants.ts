@@ -1,4 +1,4 @@
-import { mockSearchTextValue, mockTextMultiline } from "./mocks";
+import { mockSearchTextMultilineValue, mockTextMultiline } from "./mocks";
 
 export const DEFAULT_WIDTH = 410;
 export const DEFAULT_HEIGHT = 145;
@@ -10,12 +10,18 @@ export const DEFAULT_CLIP = {
 };
 
 export const INITIAL_SEARCH_TEXT = mockTextMultiline;
-export const INITIAL_SEARCH_VALUE = mockSearchTextValue;
+export const INITIAL_SEARCH_VALUE = mockSearchTextMultilineValue;
 export const SELECTORS = {
-  foundEntity: ".backdrop mark",
   search: "#search-field",
-  editor: ".editor",
+  searchPrev: "#search-prev",
+  searchNext: "#search-next",
+  searchReset: "#search-reset",
+  searchResults: "#search-results",
+  searchRegex: "#search-regex",
+
   container: ".container",
+
+  editor: ".editor",
+  foundEntity: ".backdrop mark",
   textContainer: ".textContainer",
-  multilineSwitcher: "#search-multiline",
 };

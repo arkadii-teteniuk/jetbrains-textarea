@@ -9,15 +9,20 @@
   </head>
   <body>
   <div class="column">
-    <label>Multiline:
-      <input id="search-multiline" type="checkbox">
+    <label>Regex:
+      <input id="search-regex" type="checkbox">
     </label>
   </div>
 
   <div class="column search">
     <label class="column">Search query:
-      <input type="text" id="search-field" value="">
+      <textarea id="search-field" rows="4"></textarea>
     </label>
+
+    <button id="search-prev" title="Previous">↑</button>
+    <button id="search-next" title="Next">↓</button>
+    <button id="search-reset" title="Reset">X</button>
+    <span id="search-results"></span>
   </div>
 
   <div class="textContainer">

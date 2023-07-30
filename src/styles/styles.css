@@ -53,7 +53,8 @@ body {
 
 .search {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: flex-end;
 }
 
 .search textarea, input[type="text"] {
@@ -62,6 +63,13 @@ body {
     min-width: 100px;
     min-height: 24px;
     border: 1px solid black;
+}
+
+button {
+    min-height: 24px;
+    width: 24px;
+    border: 1px solid black;
+    border-left: 0;
 }
 
 .search textarea[rows="1"], .search input[type="text"] {
@@ -93,7 +101,6 @@ input {
 
     resize: both;
     max-width: 100vw;
-    overflow-y: scroll;
 }
 
 .container, .backdrop, .editor {
@@ -120,6 +127,9 @@ input {
     padding-right: 0;
     border: 1px solid black;
 
+    overflow-y: auto;
+    overflow-x: hidden;
+
     white-space: break-spaces;
     word-break: break-word;
 }
@@ -130,12 +140,15 @@ input {
     width: 100%;
     height: 100%;
     position: absolute;
-    overflow: hidden;
 
     pointer-events: none;
-    padding-right: 15px;
+    padding-right: 0;
 
     white-space: break-spaces;
+}
+
+#search-results {
+    margin-left: 0.5em;
 }
 
 .backdrop mark {
@@ -145,6 +158,11 @@ input {
     color: #000;
 
     word-break: inherit;
+}
+
+.backdrop mark.selected {
+    background-color: rgba(255, 106, 0, 0.5);
+    color: #000;
 }
 
 @media screen and (max-width: 400px) {
